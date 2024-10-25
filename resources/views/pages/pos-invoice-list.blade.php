@@ -49,20 +49,21 @@
                                 <tbody>
                                     @php $serial = 1; @endphp
                                     @foreach ($invoices as $invoice)
-                                    <td class="text-center">@php
-                                        echo $serial++
-                                        @endphp
-                                    </td>
-                                    <td class="text-center">{{ __('INV00')}}{{ $invoice->invoicee_no }}</td>
-                                    <td class="text-center">{{ $invoice->id }}</td>
-                                    <td class="text-center">{{ $invoice->created_at->format('d-m-Y') }}</td>
-                                    <td class="text-center">
-                                        <a href="{{route('print-invoice', ['id' => $invoice->id])}}" class="btn btn-sm btn-info mr-1"><i class="ti ti-printer f-18"></i></a>
-                                    </td>
+                                    <tr>
+                                        <td class="text-center">{{ $serial++ }}</td>
+                                        <td class="text-center">{{ __('INV00') }}{{ $invoice->invoicee_no }}</td>
+                                        <td class="text-center">{{ $invoice->id }}</td>
+                                        <td class="text-center">{{ $invoice->created_at->format('d-m-Y') }}</td>
+                                        <td class="text-center">
+                                            <a href="{{ route('print-invoice', ['id' => $invoice->id]) }}" class="btn btn-sm btn-info mr-1">
+                                                <i class="ti ti-printer f-18"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
                                     @endforeach
                                 </tbody>
-
                             </table>
+
                         </div>
                     </div>
                 </div>
