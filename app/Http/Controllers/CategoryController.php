@@ -16,13 +16,22 @@ class CategoryController extends Controller
     public function create(Request $request)
     {
         $request->validate([
-            'category_name' =>'required|string|max:255',
-            'status' =>'required|integer',
+            'category_name' => 'required|string|max:255',
+            'status' => 'required|integer',
         ]);
-
+    
+        // Check if a category with the same name already exists
+        $existingCategory = CategoryModel::where('category_name', $request->category_name)->whereNull('is_delete')->first();
+        
+        if ($existingCategory) {
+            return redirect()->route('categories.index')->with('error', 'Category name already exists.');
+        }
+    
         CategoryModel::create($request->all());
+        
         return redirect()->route('categories.index')->with('success', 'Category created successfully');
     }
+    
 
     public function edit(Request $request,$category)
     {   

@@ -186,6 +186,16 @@ class InvoiceController extends Controller
         $invoices = Invoice::whereNull('is_delete')->get();
         return view('pages.pos-invoice-list', ['invoices' => $invoices]);
     }
+    public function deleteInvoice($id){
+        $invoice = Invoice::where('id', $id)->first();
+        if($invoice){
+            $invoice->is_delete = 1;
+            $invoice->save();
+            return redirect()->route('invoices.list')->with('success', 'Invoice deleted successfully');
+        }else{
+            return redirect()->route('invoices.list')->with('error', 'Invoice not found');
+        }
+    }
 
     public function printInvoice($id)
     {

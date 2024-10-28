@@ -25,12 +25,6 @@
         <!-- [ breadcrumb ] end -->
 
         <div class="row">
-            @if (session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-            @endif
-            @if (session('error'))
-            <div class="alert alert-danger">{{ session('error') }}</div>
-            @endif
             <div class="col-lg-12 col-md-6">
                 <div class="card">
                     <div class="card-body">
@@ -61,10 +55,15 @@
                                         </td>
                                         <td class="text-center">
                                             <a href="" class="avtar avtar-xs btn btn-success btn-sm" data-bs-target="#CategoryEditModel{{$category->id}}" data-bs-toggle="modal" data-toggle="tooltip" data-placement="left" title="Update"><i class="ti ti-edit f-18" aria-hidden="true"></i></a>
-                                            <a href="" onclick="event.preventDefault(); document.getElementById('delete-form{{$category->id}}').submit(); return confirm('Are You Sure?')" class="avtar avtar-xs btn btn-danger btn-sm" data-toggle="tooltip" data-placement="left" title="Delete"><i class="ti ti-trash f-18" aria-hidden="true"></i></a>
-                                            <form id="delete-form{{$category->id}}"
+                                            <a href="#" onclick="confirmDelete(event, {{ $category->id }})" class="avtar avtar-xs btn btn-danger btn-sm" data-toggle="tooltip" data-placement="left" title="Delete">
+                                                <i class="ti ti-trash f-18" aria-hidden="true"></i>
+                                            </a>
+
+                                            <form id="delete-form{{ $category->id }}"
                                                 action="{{ route('categories.destroy', ['category' => $category->id]) }}"
-                                                method="POST" style="display: none;"> @csrf @method('DELETE')
+                                                method="POST" style="display: none;">
+                                                @csrf
+                                                @method('DELETE')
                                             </form>
                                         </td>
                                     </tr>
@@ -148,4 +147,55 @@
     </div>
 </div>
 @include('components.footer')
+
+@if (session('success'))
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: "{{ session('success') }}",
+        showConfirmButton: true,
+        timer: 2000
+    });
+</script>
+@endif
+
+@if (session('error'))
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "{{ session('error') }}",
+        showConfirmButton: true,
+        timer: 2000
+    });
+</script>
+@endif
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function confirmDelete(event, categoryId) {
+        event.preventDefault();
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Submit the form
+                document.getElementById('delete-form' + categoryId).submit();
+            }
+        });
+    }
+</script>
+
 @endauth

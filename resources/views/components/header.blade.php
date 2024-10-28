@@ -20,6 +20,9 @@
         <link rel="stylesheet" href="../assets/fonts/material.css">
         <link rel="stylesheet" href="../assets/css/style.css" id="main-style-link">
         <link rel="stylesheet" href="../assets/css/style-preset.css">
+        <!-- SweetAlert2 CSS and JS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
     </head>
   <!-- [Head] end -->
   <!-- [Body] Start -->

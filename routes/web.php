@@ -45,4 +45,5 @@ Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])-
 Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index');
 Route::post('/save-invoice', [InvoiceController::class,'saveInvoice'])->name('invoices.store');
 Route::get('/invoice', [InvoiceController::class, 'list'])->name('invoices.list');
+Route::delete('/invoice-delete/{id}', [InvoiceController::class, 'deleteInvoice'])->name('delete-invoice');
 Route::get('/invoice-print/{id}', [InvoiceController::class, 'printInvoice'])->name('print-invoice');

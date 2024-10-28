@@ -331,7 +331,8 @@
     </div><!-- /.modal-dialog -->
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
     document.getElementById('product_name').addEventListener('keyup', function() {
         let searchQuery = this.value.toLowerCase();
@@ -517,20 +518,43 @@
             },
             success: function(response) {
                 if (response.success) {
-                    alert('Invoice saved successfully!');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'Invoice saved successfully!',
+                        showConfirmButton: true,
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Redirect to the invoice list route
+                            window.location.href = "{{ route('invoices.list') }}";
+                        }
+                    });
+
 
                     // Reset the form (assuming your form has an ID of 'invoiceForm')
                     $('#invoiceForm')[0].reset(); // Resets the form fields
                 } else {
-                    alert('Failed to save invoice.');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Failed!',
+                        text: 'Failed to save invoice.',
+                        showConfirmButton: true
+                    });
                 }
             },
             error: function(xhr, status, error) {
                 console.error('Error:', error);
                 console.log(xhr.responseText);
-                alert('An error occurred while saving the invoice.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops!',
+                    text: "An error occurred while saving the invoice. {{session('error')}}",
+                    showConfirmButton: true
+                });
             }
         });
+
 
     }
 
