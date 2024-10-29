@@ -206,10 +206,10 @@ class InvoiceController extends Controller
 
     public function saveInvoice(Request $request)
     {   
-        // echo '<pre>'; print_r($request->all()); echo '</pre>'; exit();
+        // Validate the request data
         $validatedData = $request->validate([
             'customer_id' => 'nullable',
-            'invoice_discount' => 'numeric|min:0',
+            'total_discount' => 'numeric|min:0',
             'total_vat' => 'numeric|min:0',
             'grand_total' => 'required|numeric|min:0',
             'items' => 'required|array',
@@ -220,10 +220,9 @@ class InvoiceController extends Controller
             'items.*.discount' => 'required|numeric|min:0',
             'items.*.total' => 'required|numeric|min:0'
         ]);
-
-        DB::beginTransaction();
-
-        try {
+    
+        // Transaction to save invoice and items
+        return DB::transaction(function () use ($validatedData, $request) {
             // Save Invoice
             $invoice = Invoice::create([
                 'customer_id' => $validatedData['customer_id'] ?? null,
@@ -231,7 +230,7 @@ class InvoiceController extends Controller
                 'total_vat' => $request->total_vat,
                 'grand_total' => $request->grand_total,
             ]);
-
+    
             // Save Invoice Items
             foreach ($validatedData['items'] as $item) {
                 InvoiceItem::create([
@@ -244,13 +243,9 @@ class InvoiceController extends Controller
                     'total' => $item['total']
                 ]);
             }
-
-            DB::commit();
-
+    
             return response()->json(['success' => true, 'message' => 'Invoice saved successfully!'], 200);
-        } catch (\Exception $e) {
-            DB::rollback();
-            return response()->json(['success' => false, 'message' => 'Failed to save invoice. Please try again.'], 500);
-        }
+        });
     }
+    
 }

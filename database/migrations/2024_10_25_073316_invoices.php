@@ -17,6 +17,8 @@ return new class extends Migration
             $table->decimal('total_discount', 10, 2);
             $table->decimal('total_vat', 10, 2);
             $table->decimal('grand_total', 10, 2);
+            $table->boolean('is_active')->default(true);
+            $table->boolean('is_delete')->default(NULL);
             $table->timestamps();
         });
         
